@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 export default function AnalyzerForm() {
   const [formData, setFormData] = useState({
-    role: '',
-    company: '',
+    role: 'Junior Software Engineer',
+    company: 'Tech Corp',
     jobType: 'Full-time',
-    jobDescription: '',
-    cvText: '',
+    jobDescription: 'Dicari Junior Software Engineer dengan kemampuan React, Node.js, dan pemahaman AI. Memiliki pengalaman membuat REST API dan testing.',
+    cvText: 'Nama: Albi Nur Rosif. Pengalaman: Membuat Kumpulink pakai Next.js, React Notes pakai MERN, dan PreApply pakai Python. Menguasai TypeScript dan Tailwind.',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [aiResult, setAiResult] = useState<string | null>(null);
@@ -132,7 +132,7 @@ export default function AnalyzerForm() {
       {aiResult && (
         <div className="p-8 bg-background rounded-2xl shadow-lg border border-foreground/10 mt-4">
           <h3 className="text-xl font-bold text-foreground mb-4 border-b border-foreground/10 pb-2">Hasil Analisis AI</h3>
-          <div className="whitespace-pre-wrap text-foreground/90 font-mono text-sm">{aiResult}</div>
+          <div className="whitespace-pre-wrap text-foreground/90 font-mono text-sm">{JSON.stringify(aiResult)}</div>
         </div>
       )}
     </div>
