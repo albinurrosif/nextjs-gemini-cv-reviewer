@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function AnalyzerForm() {
   const [formData, setFormData] = useState({
-    role: "",
-    company: "",
-    jobType: "Full-time",
-    jobDescription: "",
-    cvText: "",
+    role: '',
+    company: '',
+    jobType: 'Full-time',
+    jobDescription: '',
+    cvText: '',
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,11 +21,11 @@ export default function AnalyzerForm() {
     setIsLoading(true);
 
     // TODO: Phase 2 - Koneksi ke API Route
-    console.log("Data siap dianalisis:", formData);
-    
+    console.log('Data siap dianalisis:', formData);
+
     setTimeout(() => {
       setIsLoading(false);
-      alert("Simulasi analisis selesai! Cek console.");
+      alert('Simulasi analisis selesai! Cek console.');
     }, 1500);
   };
 
@@ -35,41 +35,25 @@ export default function AnalyzerForm() {
         <h2 className="text-2xl font-bold text-gray-800">Detail Lamaran</h2>
         <p className="text-sm text-gray-500">Masukkan informasi lowongan dan CV Anda untuk dianalisis.</p>
       </div>
-      
+
       {/* Baris Pertama: Role, Company, Job Type */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="flex flex-col gap-2">
           <label className="text-sm font-semibold text-gray-700">Target Role</label>
-          <input
-            type="text"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            placeholder="e.g. Software Engineer"
-            className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            required
-          />
+          <input type="text" name="role" value={formData.role} onChange={handleChange} placeholder="e.g. Software Engineer" className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required />
         </div>
         <div className="flex flex-col gap-2">
           <label className="text-sm font-semibold text-gray-700">Company</label>
-          <input
-            type="text"
-            name="company"
-            value={formData.company}
-            onChange={handleChange}
-            placeholder="e.g. Google"
-            className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            required
-          />
+          <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="e.g. Google" className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" required />
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-semibold text-gray-700">Job Type</label>
-          <select
-            name="jobType"
-            value={formData.jobType}
-            onChange={handleChange}
-            className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-          >
+          <label htmlFor="jobType" className="text-sm font-semibold text-gray-700">
+            Job Type
+          </label>
+          <select id="jobType" defaultValue="" name="jobType" value={formData.jobType} onChange={handleChange} className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+            <option value="" disabled>
+              Select job type
+            </option>
             <option value="Full-time">Full-time</option>
             <option value="Part-time">Part-time</option>
             <option value="Internship">Internship</option>
@@ -95,23 +79,12 @@ export default function AnalyzerForm() {
       {/* Input CV Text */}
       <div className="flex flex-col gap-2">
         <label className="text-sm font-semibold text-gray-700">CV / Resume Text (Sementara menggunakan teks)</label>
-        <textarea
-          name="cvText"
-          value={formData.cvText}
-          onChange={handleChange}
-          placeholder="Paste isi teks CV Anda di sini..."
-          className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none min-h-[200px]"
-          required
-        />
+        <textarea name="cvText" value={formData.cvText} onChange={handleChange} placeholder="Paste isi teks CV Anda di sini..." className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none min-h-[200px]" required />
       </div>
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={isLoading}
-        className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-xl transition-colors disabled:bg-gray-400 text-lg"
-      >
-        {isLoading ? "Menganalisis dengan AI..." : "Analyze Application"}
+      <button type="submit" disabled={isLoading} className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-xl transition-colors disabled:bg-gray-400 text-lg">
+        {isLoading ? 'Menganalisis dengan AI...' : 'Analyze Application'}
       </button>
     </form>
   );
