@@ -1,6 +1,6 @@
 // app/api/analyze/route.ts
 import { NextResponse } from 'next/server';
-import { analyzeCV } from '@/lib/ai/gemini';
+import { analyzeCV } from '@/lib/ai/gemini.service';
 
 export async function POST(req: Request) {
   try {
