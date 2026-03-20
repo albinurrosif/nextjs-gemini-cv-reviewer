@@ -1,4 +1,3 @@
-// app/api/analyze/route.ts
 import { NextResponse } from 'next/server';
 import { analyzeCV } from '@/lib/ai/gemini.service';
 

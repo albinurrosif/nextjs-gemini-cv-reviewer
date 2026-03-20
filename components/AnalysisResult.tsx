@@ -134,7 +134,6 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
           {activeTab === 'improvements' && (
             <motion.div key="improvements" {...tabAnimation} className="p-8 bg-background rounded-2xl shadow-lg border border-foreground/10">
               <div className="flex flex-col gap-10">
-                {/* LACI BARU: MAGIC BULLETS (KRITIK & REWRITE) */}
                 <div className="border-b border-foreground/10 pb-8">
                   <h3 className="text-xl font-bold text-foreground mb-6">🪄 Magic Bullets (Perbaikan Kritis)</h3>
                   {/* EMPTY STATE HANDLING UNTUK MAGIC BULLETS */}

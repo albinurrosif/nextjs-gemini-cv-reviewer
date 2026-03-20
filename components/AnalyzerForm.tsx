@@ -116,7 +116,6 @@ export default function AnalyzerForm() {
   };
 
   return (
-    // Memperlebar max-w-3xl menjadi max-w-4xl agar tidak terlalu sempit di Desktop
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-10 p-4 md:p-8">
       {/* --- HERO SECTION: Penjelasan Web --- */}
       <div className="text-center flex flex-col gap-4 mt-8">

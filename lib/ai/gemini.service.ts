@@ -77,7 +77,6 @@ export async function analyzeCV(jobData: any, cvText: string): Promise<Evaluatio
     },
   });
 
-  // Prompt dasar (Nanti di Phase 3 kita akan buat ini lebih canggih dengan Evaluator)
   const prompt = `
     Role: Anda adalah Expert Tech Recruiter dan Professional CV Writer kelas dunia.
     Target Role: ${jobData.role} at ${jobData.company} (${jobData.jobType}).

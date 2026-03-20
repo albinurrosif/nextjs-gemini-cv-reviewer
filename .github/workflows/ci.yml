@@ -1,0 +1,36 @@
+name: Continuous Integration (CI)
+
+# Kapan robot ini harus jalan? 
+# Jawab: Setiap ada push atau Pull Request ke branch main/master
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  test:
+    name: Run Automated Tests
+    runs-on: ubuntu-latest # Robot akan menggunakan OS Linux Ubuntu terbaru
+
+    steps:
+    # 1. Robot mengambil kodemu dari repository
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+
+    # 2. Robot menginstal Node.js di komputernya
+    - name: ⚙️ Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Menggunakan Node.js versi 20
+        cache: 'npm'       # Mempercepat proses install
+
+    # 3. Robot menjalankan npm install
+    - name: 📦 Install Dependencies
+      run: npm install
+
+    # 4. Robot menjalankan test Vitest yang sudah kita buat!
+    - name: 🧪 Run Unit Tests
+      run: npm run test
+      env:
+        CI: true # Memberitahu Vitest agar jalan 1x saja (tidak watch mode)
