@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 PreApply v2 — AI Job Analyzer (Next.js Edition)
 
-## Getting Started
+A modern, production-ready web application to analyze CVs against job descriptions using Google Gemini AI. 
 
-First, run the development server:
+[**Try the Live App Here**](https://preapply.vercel.app)
 
+This project is a massive upgrade from V1, transitioning from a Python script to a full-fledged SaaS architecture using Next.js 16. It focuses on using Large Language Models (LLM) with strict JSON output parsing to perform gap analysis, provide actionable insights, and generate tailored content using the STAR method.
+
+### 🚀 Key Features
+
+* **📊 Smart Gap Analysis:** Instantly scores CV relevance based on ATS keywords and identifies missing skills.
+* **✨ CV Improvement (STAR Method):** Critiques weak experience bullets and rewrites them into impactful, data-driven achievements.
+* **✉️ Cover Letter Draft:** Generates a ready-to-send, highly tailored cover letter based on the specific job type (Full-time, Internship, etc.).
+* **🛡️ Enterprise-Grade Reliability:** Implements strict backend validation, type-safe API routing, and AI hallucination mitigation via robust JSON parsing.
+
+### 🌟 Additional Feature (DevOps & Engineering)
+
+* **🤖 CI/CD & AI Code Review:** This repository is integrated with a professional Git Flow. It uses **GitHub Actions** for automated Unit Testing (Vitest) and Linting (ESLint 9) on every Pull Request. It is also guarded by **CodeRabbit AI** for automated code reviews and PR summarization.
+
+### 🛠️ Tech Stack
+
+* **Frontend & Backend:** Next.js 16 (App Router, API Routes)
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS
+* **AI Engine:** Google Gemini 2.5 Flash (`@google/generative-ai`)
+* **Testing & Quality:** Vitest, ESLint (Flat Config)
+* **Deployment:** Vercel
+
+### 📦 How to Run Locally
+
+**1. Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/albinurrosif/nextjs-gemini-cv-reviewer.git
+cd nextjs-gemini-cv-reviewer
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**2. Install dependencies**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**3. Setup Secrets** Create a `.env.local` file in the root directory:
+```bash
+# Required for the main feature (Analysis)
+GEMINI_API_KEY="YOUR_GOOGLE_API_KEY"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**4. Run the App**
+```bash
+npm run dev
+```
+Open `http://localhost:3000` in your browser.
 
-## Learn More
+### ⚙️ Engineering Setup (CI/CD & Testing)
 
-To learn more about Next.js, take a look at the following resources:
+To utilize the automated testing and linting locally before pushing to GitHub:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**1. Run Linter:**
+Checks for code quality and formatting issues.
+```bash
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**2. Run Unit Tests:**
+Ensures the business logic and AI output parsers are working correctly.
+```bash
+npm run test
+```
 
-## Deploy on Vercel
+### 👨‍💻 Author
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Albi Nur Rosif**
+[Portfolio](albinur.vercel.app) | [GitHub](https://github.com/albinurrosif) | [LinkedIn](https://www.linkedin.com/in/albi-nur/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© 2026 PreApply.
