@@ -2,11 +2,18 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 import { parseAndEvaluateAIOutput, EvaluationResult } from '../evaluation/scorer.service';
 
+export interface JobDataInput {
+  role: string;
+  company: string;
+  jobType: string;
+  jobDescription: string;
+}
+
 // Kita ambil API Key dari environment variable (.env)
 const apiKey = process.env.GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(apiKey);
 
-export async function analyzeCV(jobData: any, cvText: string): Promise<EvaluationResult> {
+export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<EvaluationResult> {
   // =================================================================
   // 🛑 MODE PENGEMBANGAN (MOCKING) - MENGHEMAT QUOTA API
   // =================================================================

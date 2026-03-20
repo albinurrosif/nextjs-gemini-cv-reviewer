@@ -141,7 +141,7 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
                     <div className="flex flex-col gap-6">
                       {data.magicBullets.map((bullet, i) => (
                         <div key={i} className="bg-foreground/5 p-5 rounded-xl border border-foreground/10">
-                          <div className="mb-3 text-sm text-foreground/60 line-through">"{bullet.original}"</div>
+                          <div className="mb-3 text-sm text-foreground/60 line-through">&quot;{bullet.original}&quot;</div>
                           <div className="mb-4 text-sm text-red-500 font-medium">Kritik: {bullet.critique}</div>
                           <div className="text-sm font-bold text-green-600 dark:text-green-500">✅ Rewrite: {bullet.rewrite}</div>
                         </div>
@@ -163,7 +163,7 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
                         {copiedText === 'summary' ? 'Copied!' : 'Copy'}
                       </button>
                     </h4>
-                    <p className="text-foreground/80 leading-relaxed bg-foreground/5 p-5 rounded-xl border border-foreground/10 italic">"{data.tailoredSummary}"</p>
+                    <p className="text-foreground/80 leading-relaxed bg-foreground/5 p-5 rounded-xl border border-foreground/10 italic">&quot;{data.tailoredSummary}&quot;</p>
                   </div>
                 )}
 

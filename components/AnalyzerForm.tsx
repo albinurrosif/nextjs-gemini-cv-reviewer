@@ -7,10 +7,10 @@ import extractText from 'react-pdftotext';
 
 export default function AnalyzerForm() {
   const defaultForm = {
-    role: 'Junior Software Engineer',
-    company: 'Tech Corp',
-    jobType: 'Full-time',
-    jobDescription: 'Dicari Junior Software Engineer dengan kemampuan React, Node.js, dan pemahaman AI. Memiliki pengalaman membuat REST API dan testing.',
+    role: '',
+    company: '',
+    jobType: '',
+    jobDescription: '',
     cvText: '',
   };
 
