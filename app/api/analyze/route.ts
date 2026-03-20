@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const { role, company, jobType, jobDescription, cvText } = body;
 
     // 2. Validasi sederhana
-    if (!role || !company || !jobDescription || !cvText) {
+    if (!role || !company || !jobType || !jobDescription || !cvText) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
