@@ -9,7 +9,7 @@ export default function AnalyzerForm() {
   const defaultForm = {
     role: '',
     company: '',
-    jobType: '',
+    jobType: 'Full-time',
     jobDescription: '',
     cvText: '',
   };
