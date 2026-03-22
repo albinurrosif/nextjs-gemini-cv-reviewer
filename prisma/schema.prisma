@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["public"]
+}
+
+model User {
+  id      String   @id // ID ini akan disamakan dengan ID dari Supabase Auth
+  email   String   @unique
+  name    String?
+  reviews Review[]
+
+  @@schema("public")
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  userId     String
+  company    String
+  role       String
+  jobType    String
+  matchScore Int
+  resultJson String // Menyimpan output JSON dari Gemini
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@schema("public")
+}
