@@ -6,7 +6,9 @@ import { prisma } from '@/lib/prisma';
 export default async function Home() {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   let profileCvText: string | null = null;
 
@@ -21,7 +23,7 @@ export default async function Home() {
 
   return (
     <main className="flex-1 w-full flex flex-col items-center py-6 px-4 md:py-12 md:px-8">
-      <AnalyzeForm profileCvText={profileCvText} />
+      <AnalyzeForm key={user ? user.id : 'guest'} profileCvText={profileCvText} isLoggedIn={!!user} />
     </main>
   );
 }
