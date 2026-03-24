@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 const initialState: ActionState = { error: null };
 
@@ -35,7 +36,7 @@ export default function LoginPage() {
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
                 {/* Tautan luba password (kosong untuk sekarang) */}
-                <span className="text-xs text-muted-foreground hover:text-primary cursor-pointer">Lupa password?</span>
+                <Link href="#" className="text-xs text-muted-foreground hover:text-primary cursor-pointer">Lupa password?</Link>
               </div>
               <Input id="password" name="password" type="password" required className="bg-background" />
             </div>

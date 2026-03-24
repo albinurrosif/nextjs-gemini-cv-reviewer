@@ -15,10 +15,10 @@ export default function Footer() {
           </p>
           <span className="hidden md:inline text-border">|</span>
           <div className="flex gap-3 text-xs">
-            <Link href="/" className="hover:text-foreground transition-colors">
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
               Privacy
             </Link>
-            <Link href="/" className="hover:text-foreground transition-colors">
+            <Link href="/terms" className="hover:text-foreground transition-colors">
               Terms
             </Link>
           </div>
