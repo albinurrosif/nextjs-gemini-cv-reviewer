@@ -52,6 +52,13 @@ export default function Navbar({ user }: { user: User | null }) {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/profile" className="flex items-center w-full">
+                    <UserCircleIcon className="mr-2 h-4 w-4" />
+                    <span>Profil Saya</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild className="cursor-pointer">
                   <Link href="/dashboard" className="flex items-center w-full">
                     <LayoutDashboardIcon className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>

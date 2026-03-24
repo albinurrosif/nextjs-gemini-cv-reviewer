@@ -16,6 +16,7 @@ model User {
   id      String   @id // ID ini akan disamakan dengan ID dari Supabase Auth
   email   String   @unique
   name    String?
+  savedCvText String? // CV profile
   reviews Review[]
 
   @@schema("public")

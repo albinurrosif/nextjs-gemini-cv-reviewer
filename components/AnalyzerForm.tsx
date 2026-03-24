@@ -5,6 +5,7 @@ import AnalysisResult from './AnalysisResult';
 import { EvaluationResult } from '@/lib/evaluation/scorer.service';
 import extractText from 'react-pdftotext';
 import { saveReviewAction } from '@/app/actions/review';
+import Link from 'next/link';
 
 // --- IMPORT KOMPONEN SHADCN ---
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function AnalyzerForm() {
+export default function AnalyzerForm({ profileCvText = null }: { profileCvText?: string | null }) {
   const defaultForm = {
     role: '',
     company: '',
@@ -26,7 +27,8 @@ export default function AnalyzerForm() {
   const [formData, setFormData] = useState(defaultForm);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploadingPdf, setIsUploadingPdf] = useState(false);
-  const [cvInputMode, setCvInputMode] = useState<'upload' | 'text'>('upload');
+  // default jika punya CV
+  const [cvInputMode, setCvInputMode] = useState<'upload' | 'text' | 'profile'>(profileCvText ? 'profile' : 'upload');
   const [uploadedFileInfo, setUploadedFileInfo] = useState<{ name: string; size: string } | null>(null);
 
   const [aiResult, setAiResult] = useState<EvaluationResult | null>(null);
@@ -43,8 +45,26 @@ export default function AnalyzerForm() {
     }
   }, [aiResult]);
 
+  // Memaksa form untuk menelan teks dari profil saat halaman pertama kali dimuat
+  useEffect(() => {
+    if (profileCvText && cvInputMode === 'profile') {
+      setFormData((prev) => ({ ...prev, cvText: profileCvText }));
+    }
+  }, [profileCvText, cvInputMode]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleTabChange = (mode: 'upload' | 'text' | 'profile') => {
+    setCvInputMode(mode);
+    if (mode === 'profile' && profileCvText) {
+      setFormData((prev) => ({ ...prev, cvText: profileCvText }));
+      setUploadedFileInfo(null);
+    } else {
+      setFormData((prev) => ({ ...prev, cvText: '' }));
+      setUploadedFileInfo(null);
+    }
   };
 
   const handleReset = () => {
@@ -59,7 +79,7 @@ export default function AnalyzerForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.cvText.trim()) {
-      alert('Harap unggah PDF CV Anda atau paste teks CV terlebih dahulu!');
+      alert('Harap unggah PDF CV Anda, paste teks, atau gunakan CV profil!');
       return;
     }
 
@@ -141,11 +161,11 @@ export default function AnalyzerForm() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="role">Target Role</Label>
-                <Input id="role" name="role" value={formData.role} onChange={handleChange} placeholder="e.g. Frontend Developer" required />
+                <Input id="role" name="role" value={formData.role} onChange={handleChange} placeholder="e.g. Engineer" required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="company">Company</Label>
-                <Input id="company" name="company" value={formData.company} onChange={handleChange} placeholder="e.g. Gojek" required />
+                <Input id="company" name="company" value={formData.company} onChange={handleChange} placeholder="e.g. Google" required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="jobType">Job Type</Label>
@@ -181,29 +201,56 @@ export default function AnalyzerForm() {
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <Label>CV / Resume Anda</Label>
-                <div className="flex bg-muted p-1 rounded-md">
+                <div className="flex bg-muted p-1 rounded-md overflow-x-auto">
+                  {/* TAB 1: CV PROFIL (Hanya muncul jika punya profil) */}
+                  {profileCvText && (
+                    <button
+                      type="button"
+                      onClick={() => handleTabChange('profile')}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-sm transition-all whitespace-nowrap ${cvInputMode === 'profile' ? 'bg-background shadow-sm text-emerald-600 dark:text-emerald-500' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      ✨ CV Profil
+                    </button>
+                  )}
+
+                  {/* TAB 2: UPLOAD PDF */}
                   <button
                     type="button"
-                    onClick={() => setCvInputMode('upload')}
-                    className={`px-3 py-1 text-xs font-medium rounded-sm transition-all ${cvInputMode === 'upload' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                    onClick={() => handleTabChange('upload')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-sm transition-all whitespace-nowrap ${cvInputMode === 'upload' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                   >
-                    Upload PDF
+                    Upload PDF Baru
                   </button>
+
+                  {/* TAB 3: PASTE TEXT */}
                   <button
                     type="button"
-                    onClick={() => setCvInputMode('text')}
-                    className={`px-3 py-1 text-xs font-medium rounded-sm transition-all ${cvInputMode === 'text' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                    onClick={() => handleTabChange('text')}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-sm transition-all whitespace-nowrap ${cvInputMode === 'text' ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
                   >
                     Paste Text
                   </button>
                 </div>
               </div>
 
-              {cvInputMode === 'upload' ? (
-                <div className="border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-4 bg-muted/20 hover:bg-muted/40 transition-colors">
+              {/* RENDER KONTEN BERDASARKAN TAB */}
+              {cvInputMode === 'profile' ? (
+                <div className="border border-emerald-500/30 bg-emerald-500/10 rounded-lg p-6 flex items-center justify-between gap-4 animate-in fade-in">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">🔐</span>
+                    <div>
+                      <p className="font-semibold text-emerald-700 dark:text-emerald-400">CV Master Aktif</p>
+                      <p className="text-sm text-emerald-600/80 dark:text-emerald-500/80">Dokumen dari profile Anda akan dianalisis.</p>
+                    </div>
+                  </div>
+                  <Button type="button" variant="outline" size="sm" asChild className="shrink-0">
+                    <Link href="/profile">Edit CV</Link>
+                  </Button>
+                </div>
+              ) : cvInputMode === 'upload' ? (
+                <div className="border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-4 bg-muted/20 hover:bg-muted/40 transition-colors animate-in fade-in">
                   {uploadedFileInfo && !isUploadingPdf ? (
                     <div className="w-full flex items-center justify-between p-3 bg-background border rounded-md shadow-sm gap-2">
-                      {/* flex-1 dan min-w-0 adalah kunci agar teks bisa di-truncate (dipotong) */}
                       <div className="flex items-center gap-3 min-w-0 flex-1">
                         <span className="text-xl shrink-0">📄</span>
                         <div className="flex flex-col min-w-0 w-full">
@@ -231,7 +278,7 @@ export default function AnalyzerForm() {
                   )}
                 </div>
               ) : (
-                <Textarea name="cvText" value={formData.cvText} onChange={handleChange} placeholder="Paste seluruh isi teks CV Anda di sini..." className="min-h-[150px]" />
+                <Textarea name="cvText" value={formData.cvText} onChange={handleChange} placeholder="Paste seluruh isi teks CV Anda di sini..." className="min-h-[150px] animate-in fade-in" />
               )}
             </div>
 
