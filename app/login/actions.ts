@@ -61,3 +61,15 @@ export async function signup(
   revalidatePath('/', 'layout');
   redirect('/');
 }
+
+export async function logout() {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  // Hapus token dari Supabase & Cookies
+  await supabase.auth.signOut();
+
+  // Refresh halaman utama
+  revalidatePath('/', 'layout');
+  redirect('/');
+}
