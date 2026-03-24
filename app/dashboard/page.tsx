@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import { Review } from '@prisma/client';
 
 export default async function DashboardPage() {
   // 1. Ambil token
@@ -44,7 +45,7 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="grid gap-4">
-            {userReviews.map((review) => (
+            {userReviews.map((review: Review) => (
               <div key={review.id} className="bg-white p-6 rounded-lg shadow border border-gray-200 flex justify-between items-center">
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800">{review.role}</h2>
@@ -58,7 +59,7 @@ export default async function DashboardPage() {
                   <div className="text-2xl font-bold text-blue-600">Skor: {review.matchScore}</div>
                   <Link href={`/dashboard/${review.id}`} className="text-sm text-blue-500 underline hover:text-blue-700">
                     Lihat Detail
-                  </Link>{' '}
+                  </Link>
                 </div>
               </div>
             ))}

@@ -52,6 +52,7 @@ export default function AnalyzerForm() {
     setAiResult(null);
     setUploadedFileInfo(null);
     setCvInputMode('upload');
+    setIsSaved(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -64,6 +65,7 @@ export default function AnalyzerForm() {
 
     setIsLoading(true);
     setAiResult(null);
+    setIsSaved(false);
 
     try {
       const response = await fetch('/api/analyze', {

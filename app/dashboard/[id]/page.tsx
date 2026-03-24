@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 
 // Karena ini di dalam folder [id], bisa menangkap 'id' dari URL
-export default async function ReviewDetailPage({ params }: { params: { id: string } }) {
+export default async function ReviewDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // 1. Cek Auth
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
