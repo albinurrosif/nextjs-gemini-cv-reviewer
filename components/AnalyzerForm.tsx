@@ -6,6 +6,8 @@ import { EvaluationResult } from '@/lib/evaluation/scorer.service';
 import extractText from 'react-pdftotext';
 import { saveReviewAction } from '@/app/actions/review';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 // --- IMPORT KOMPONEN SHADCN ---
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +17,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function AnalyzerForm({ profileCvText = null }: { profileCvText?: string | null }) {
+export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false }: { profileCvText?: string | null, isLoggedIn?: boolean }) {
+  const router = useRouter();
   const defaultForm = {
     role: '',
     company: '',
@@ -331,6 +334,17 @@ export default function AnalyzerForm({ profileCvText = null }: { profileCvText?:
                 <div className="text-sm text-muted-foreground">Ingin menyimpan hasil review ini ke Dashboard Anda?</div>
                 <Button
                   onClick={async () => {
+                    // --- JIKA TAMU (GUEST) ---
+                    if (!isLoggedIn) {
+                      localStorage.setItem('pendingReview', JSON.stringify({ formData, aiResult }));
+                      toast.info('Hasil akan disimpan', {
+                        description: 'Silakan login untuk menyimpannya ke Dashboard Anda.'
+                      });
+                      router.push('/login');
+                      return;
+                    }
+
+                    // --- JIKA SUDAH LOGIN ---
                     setIsSaving(true);
                     const res = await saveReviewAction(formData, aiResult);
                     setIsSaving(false);

@@ -33,7 +33,7 @@ export async function login(
   }
 
   revalidatePath('/', 'layout');
-  redirect('/');
+  redirect('/dashboard');
 }
 
 export async function signup(

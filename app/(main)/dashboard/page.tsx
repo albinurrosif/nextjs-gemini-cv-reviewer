@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { Review } from '@prisma/client';
+import SyncPendingReview from '@/components/SyncPendingReview';
 
 // --- SHADCN & ICONS IMPORT ---
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,6 +37,7 @@ export default async function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-background text-foreground py-8 px-4 md:py-12 md:px-8">
+      <SyncPendingReview />
       <div className="max-w-6xl mx-auto space-y-8">
         {/* --- HEADER DASHBOARD --- */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-6">
