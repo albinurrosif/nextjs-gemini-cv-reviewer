@@ -4,8 +4,9 @@ import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { EvaluationResult } from '@/lib/evaluation/scorer.service';
 
-export async function saveReviewAction(formData: any, aiResult: any) {
+export async function saveReviewAction(formData: { role: string; company: string; jobType: string }, aiResult: EvaluationResult) {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
   const {

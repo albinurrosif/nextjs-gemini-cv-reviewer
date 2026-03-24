@@ -11,7 +11,8 @@ const connectionString = `${process.env.DATABASE_URL}`;
 
 // Membuat "Corong" (Pool & Adapter)
 const pool = new Pool({ connectionString });
-const adapter = new PrismaPg(pool as any);
+// @ts-expect-error: Terjadi bentrok versi tipe data Pool antara Prisma dan pg
+const adapter = new PrismaPg(pool);
 
 // Singleton Next.js
 const globalForPrisma = global as unknown as { prisma: PrismaClient };

@@ -36,7 +36,8 @@ export default async function ReviewDetailPage({ params }: { params: { id: strin
   let aiData;
   try {
     aiData = JSON.parse(review.resultJson);
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     return <div className="p-8 text-red-500">Error: Data JSON rusak.</div>;
   }
 
