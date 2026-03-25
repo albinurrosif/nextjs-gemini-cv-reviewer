@@ -12,6 +12,7 @@ export interface InterviewPrep {
 
 export interface EvaluationResult {
   isValidInput: boolean;
+  invalidReason?: string;
   matchScore: number;
   strengths: string[];
   missingSkills: string[];
@@ -28,6 +29,7 @@ export interface EvaluationResult {
   tailoredProjects: TailoredItem[];
   coverLetter: string;
   interviewQuestions: InterviewPrep[];
+  rewrittenCv?: string;
 }
 
 export function parseAndEvaluateAIOutput(rawOutput: string): EvaluationResult {
@@ -41,10 +43,11 @@ export function parseAndEvaluateAIOutput(rawOutput: string): EvaluationResult {
     // 2. Ubah string menjadi Object JavaScript
     const parsedData = JSON.parse(cleanedOutput);
 
-    // 3. Validasi: Kita pastikan bentuknya sesuai Interface
-    // Jika AI lupa mengirim array, kita amankan dengan fallback [] (array kosong)
+    // 3. Validasi: pastikan bentuknya sesuai Interface
+    // Jika AI lupa mengirim array, amankan dengan fallback [] (array kosong)
     const evaluation: EvaluationResult = {
       isValidInput: typeof parsedData.isValidInput === 'boolean' ? parsedData.isValidInput : true,
+      invalidReason: typeof parsedData.invalidReason === 'string' ? parsedData.invalidReason : '',
       matchScore: typeof parsedData.matchScore === 'number' ? parsedData.matchScore : 0,
       strengths: Array.isArray(parsedData.strengths) ? parsedData.strengths : [],
       missingSkills: Array.isArray(parsedData.missingSkills) ? parsedData.missingSkills : [],
@@ -57,6 +60,7 @@ export function parseAndEvaluateAIOutput(rawOutput: string): EvaluationResult {
       tailoredProjects: Array.isArray(parsedData.tailoredProjects) ? parsedData.tailoredProjects : [],
       coverLetter: typeof parsedData.coverLetter === 'string' ? parsedData.coverLetter : '',
       interviewQuestions: Array.isArray(parsedData.interviewQuestions) ? parsedData.interviewQuestions : [],
+      rewrittenCv: typeof parsedData.rewrittenCv === 'string' ? parsedData.rewrittenCv : undefined,
     };
 
     return evaluation;

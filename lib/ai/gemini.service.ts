@@ -85,7 +85,7 @@ export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<
   });
 
   const prompt = `
-    Role: Anda adalah Expert Tech Recruiter dan Professional CV Writer kelas dunia.
+    Role: Anda adalah Senior Executive Recruiter dan Professional CV Writer kelas dunia.
     Target Role: ${jobData.role} at ${jobData.company} (${jobData.jobType}).
 
     JOB DESCRIPTION:
@@ -99,7 +99,7 @@ export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<
     
     🌍 ATURAN BAHASA (SANGAT PENTING):
     1. Bagian Analisis & Komentar (strengths, missingSkills, strategicAdvice, atsKeywords, magicBullets critique, interviewQuestions): WAJIB gunakan BAHASA INDONESIA yang ramah dan profesional.
-    2. Bagian Konten CV & Surat Lamaran (tailoredSummary, tailoredExperiences, tailoredProjects, magicBullets rewrite, coverLetter): WAJIB MENGIKUTI BAHASA DARI JOB DESCRIPTION (Inggris atau Indonesia).
+    2. Bagian Konten CV & Surat Lamaran (tailoredSummary, tailoredExperiences, tailoredProjects, magicBullets rewrite, coverLetter): WAJIB MENGIKUTI BAHASA DARI JOB DESCRIPTION.
 
     ⚠️ ATURAN MUTLAK: JANGAN PERNAH mengarang fakta, skill, atau pengalaman yang tidak ada di CV asli kandidat!
     
@@ -112,6 +112,7 @@ export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<
 
     {
       "isValidInput": <boolean: tulis "false" HANYA JIKA JD atau CV sangat tidak masuk akal, berupa teks acak/gibberish, atau terlalu pendek. Jika valid, tulis "true">,
+      "invalidReason": "<string: KOSONGKAN jika valid. Jika invalid, jelaskan DENGAN SPESIFIK apa yang salah.'>",
       "matchScore": <number 0-100: Skor kecocokan ketat berdasarkan ATS keyword match>,
       "strengths": [
         "<string: Kekuatan kandidat DAN jelaskan MENGAPA ini relevan dengan JD>"
@@ -171,5 +172,64 @@ export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<
   } catch (error) {
     console.error('Gemini API Error:', error);
     throw new Error('Failed to generate AI response');
+  }
+}
+
+export async function analyzeGeneralCV(cvText: string): Promise<EvaluationResult> {
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-2.5-flash',
+    generationConfig: {
+      responseMimeType: 'application/json',
+    },
+  });
+
+  const prompt = `
+    Role: Anda adalah Senior Executive Recruiter dan Professional CV Writer kelas dunia.
+    Tugas: Lakukan audit ATS secara UMUM pada CV berikut dan tulis ulang seluruh isinya menjadi lebih menjual.
+
+    CANDIDATE CV:
+    "${cvText}"
+
+    🌍 ATURAN BAHASA (SANGAT PENTING):
+    1. Bagian Rapor & Komentar (invalidReason, strengths, missingSkills, strategicAdvice, interviewQuestions): WAJIB gunakan BAHASA INDONESIA.
+    2. Bagian "rewrittenCv": WAJIB MENGIKUTI BAHASA ASLI DARI CV KANDIDAT (Jika CV asli bahasa Inggris, tulis ulang dalam bahasa Inggris. Jika Indonesia, gunakan Indonesia).
+
+    CRITICAL RULES FOR JSON OUTPUT:
+    1. Respond ONLY with valid JSON.
+    2. ALL keys must be enclosed in double quotes.
+    3. Untuk key yang tidak relevan dengan analisis umum (seperti coverLetter, tailoredExperiences), biarkan KOSONG (string kosong "" atau array kosong []).
+
+    You MUST respond in STRICT JSON format matching the exact keys below:
+    {
+      "isValidInput": <boolean: false HANYA JIKA CV sangat tidak masuk akal atau berisi teks acak/gibberish>,
+      "invalidReason": "<string: Kosongkan jika valid. Jika invalid, jelaskan DENGAN SPESIFIK apa yang salah.>",
+      "matchScore": <number 0-100: Skor ATS secara umum (Beri skor rendah jika tidak ada metrik/angka)>,
+      "strengths": ["<string: 3-4 Kekuatan dari CV asli>"],
+      "missingSkills": ["<string: 3-4 Kelemahan format atau isi CV (Kritik tajam tapi membangun)>"],
+      "strategicAdvice": "<string: 2 paragraf saran untuk merombak CV asli>",
+      "atsKeywords": [], 
+      "magicBullets": [],
+      "tailoredSummary": "",
+      "tailoredExperiences": [],
+      "tailoredProjects": [],
+      "coverLetter": "",
+      "interviewQuestions": [
+        {
+          "question": "<string: 3 pertanyaan interview Behavioral berdasarkan pengalaman di CV>",
+          "reason": "<string: Alasan HRD menanyakan ini>",
+          "sampleAnswer": "<string: Contoh jawaban metode STAR>"
+        }
+      ],
+      "rewrittenCv": "<string: TULIS ULANG SELURUH CV ASLI KE DALAM TEKS MARKDOWN YANG RAPI DAN RAMAH ATS. Gunakan Action Verbs. Ubah poin pengalaman menjadi format STAR. (INGAT ATURAN BAHASA NO.2)>"
+    }
+  `;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const rawText = result.response.text();
+    return parseAndEvaluateAIOutput(rawText);
+  } catch (error) {
+    console.error('Gemini API Error (General):', error);
+    throw new Error('Failed to generate AI response for General Analysis');
   }
 }

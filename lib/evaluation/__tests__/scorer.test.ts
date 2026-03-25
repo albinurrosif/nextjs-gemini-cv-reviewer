@@ -18,32 +18,39 @@ describe('Scorer Service - parseAndEvaluateAIOutput', () => {
       tailoredProjects: [],
       coverLetter: 'Halo HRD...',
       interviewQuestions: [],
+      rewrittenCv: '# CV Fulan\nPengalaman yang luar biasa...',
     });
 
-    // Kita jalankan fungsinya
+    // jalankan fungsinya
     const result = parseAndEvaluateAIOutput(validMockJSON);
 
-    // Kita 'harapkan' (expect) hasilnya sesuai!
+    // 'harapkan' (expect) hasilnya sesuai!
     expect(result.isValidInput).toBe(true);
+    expect(result.invalidReason).toBe('');
     expect(result.matchScore).toBe(85);
     expect(result.strengths[0]).toBe('Bisa React');
+    expect(result.rewrittenCv).toContain('CV Fulan');
   });
 
   // Skenario 2: Bagaimana jika AI LUPA mengirim Array dan malah ngirim String? (Type Safety)
   it('harus memberikan nilai default (fallback) jika AI mengirim tipe data yang salah', () => {
     const badTypeJSON = JSON.stringify({
       isValidInput: 'true', // Salah tipe (harus boolean)
+      invalidReason: 123, // Salah tipe (harus string)
       matchScore: 'Delapan Puluh', // Salah tipe (harus number)
       strengths: 'Bisa React', // Salah tipe (harus Array)
+      rewrittenCv: true, // Salah tipe (harus string)
     });
 
     const result = parseAndEvaluateAIOutput(badTypeJSON);
 
-    // Kita harapkan fungsi kita cukup pintar untuk me-reset nilai yang ngawur jadi default
+    // harapkan function cukup pintar untuk me-reset nilai yang ngawur jadi default
     expect(result.isValidInput).toBe(true); // Fallback ke true
+    expect(result.invalidReason).toBeUndefined(); // Tidak ada
     expect(result.matchScore).toBe(0); // Fallback ke 0
     expect(Array.isArray(result.strengths)).toBe(true); // Fallback ke array kosong []
     expect(result.strengths.length).toBe(0);
+    expect(result.rewrittenCv).toBeUndefined(); // Tidak ada
   });
 
   // Skenario 3: Bagaimana jika AI cuma membalas teks biasa (Bukan JSON)?
@@ -52,7 +59,7 @@ describe('Scorer Service - parseAndEvaluateAIOutput', () => {
 
     const result = parseAndEvaluateAIOutput(gibberishText);
 
-    // Kita harapkan fungsi kita masuk ke blok 'catch' dan mereturn objek error default
+    // harapkan function masuk ke blok 'catch' dan mereturn objek error default
     expect(result.isValidInput).toBe(false);
     expect(result.matchScore).toBe(0);
     expect(result.strengths[0]).toContain('Gagal');

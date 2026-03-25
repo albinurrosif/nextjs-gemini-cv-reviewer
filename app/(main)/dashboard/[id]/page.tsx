@@ -3,6 +3,8 @@ import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import GeneralAnalysisResult from '@/components/GeneralAnalysisResult';
+
 
 // --- IMPORT KOMPONEN UI & IKON ---
 import { Button } from '@/components/ui/button';
@@ -57,18 +59,22 @@ export default async function ReviewDetailPage({ params }: { params: Promise<{ i
           </Link>
         </Button>
 
-        {/* --- HEADER INFO LOWONGAN --- */}
+        {/* --- HEADER INFO LOWONGAN / UMUM --- */}
         <div className="space-y-4 border-b pb-6">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">{review.role}</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">{review.jobType === 'General' ? 'Audit Skor ATS CV' : review.role}</h1>
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <BuildingIcon className="w-4 h-4 shrink-0" />
-              <span className="font-medium text-foreground">{review.company}</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <BriefcaseIcon className="w-4 h-4 shrink-0" />
-              <span>{review.jobType}</span>
-            </div>
+            {review.jobType !== 'General' && (
+              <>
+                <div className="flex items-center gap-1.5">
+                  <BuildingIcon className="w-4 h-4 shrink-0" />
+                  <span className="font-medium text-foreground">{review.company}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <BriefcaseIcon className="w-4 h-4 shrink-0" />
+                  <span>{review.jobType}</span>
+                </div>
+              </>
+            )}
             <div className="flex items-center gap-1.5">
               <CalendarIcon className="w-4 h-4 shrink-0" />
               <span>{new Date(review.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
@@ -76,11 +82,8 @@ export default async function ReviewDetailPage({ params }: { params: Promise<{ i
           </div>
         </div>
 
-        {/* --- HASIL AI (DAUR ULANG KOMPONEN) --- */}
-        <div className="pt-2">
-          {/* Kita tinggal melempar aiData ke dalam komponen AnalysisResult! */}
-          <AnalysisResult data={aiData} />
-        </div>
+        {/* --- HASIL AI (PENGKONDISIAN PINTAR) --- */}
+        <div className="pt-2">{review.jobType === 'General' ? <GeneralAnalysisResult data={aiData} /> : <AnalysisResult data={aiData} />}</div>
       </div>
     </main>
   );
