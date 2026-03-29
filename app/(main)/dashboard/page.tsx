@@ -46,20 +46,20 @@ export default async function DashboardPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Dashboard Riwayat</h1>
-            <p className="text-muted-foreground mt-1 text-sm">Anda memiliki {userReviews.length} dokumen CV yang telah dianalisis.</p>
+            <p className="text-muted-foreground mt-1 text-sm">Ada {userReviews.length} riwayat review CV-mu di sini.</p>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className="gap-2 w-full sm:w-auto">
-                <PlusIcon className="w-4 h-4" /> Analisis CV Baru
+                <PlusIcon className="w-4 h-4" /> Review CV Baru
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/">🎯 Analisis Loker (CV vs JD)</Link>
+                <Link href="/match">🎯 Cek Kecocokan CV</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/general">🔍 Cek Skor ATS Umum</Link>
+                <Link href="/general">🔍 Cek ATS Umum</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -73,24 +73,24 @@ export default async function DashboardPage() {
                 <FileTextIcon className="w-8 h-8 text-muted-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold">Belum ada riwayat analisis</h3>
-                <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">Mulai tingkatkan peluang lolos HRD dengan membandingkan CV Anda dengan kualifikasi pekerjaan.</p>
+                <h3 className="text-lg font-semibold">Belum ada riwayat review</h3>
+                <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">Mulai review CV-mu untuk melihat kecocokannya dengan standar ATS atau kriteria loker incaran.</p>
               </div>
               <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="gap-2 w-full sm:w-auto">
-                <PlusIcon className="w-4 h-4" /> Mulai Analisis Pertama Anda
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/">🎯 Analisis Loker (CV vs JD)</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/general">🔍 Cek Skor ATS Umum</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="gap-2 w-full sm:w-auto">
+                    <PlusIcon className="w-4 h-4" /> Mulai Review Pertama
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link href="/match">🎯 Cek Kecocokan CV</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link href="/general">🔍 Cek ATS Umum</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </CardContent>
           </Card>
         ) : (
@@ -117,7 +117,7 @@ export default async function DashboardPage() {
                         <CardDescription className="flex items-center gap-1.5 font-medium">
                           {isGeneral ? <FileTextIcon className="w-3.5 h-3.5 shrink-0 text-primary" /> : <BuildingIcon className="w-3.5 h-3.5 shrink-0" />}
                           <span className="line-clamp-1" title={review.company}>
-                            {isGeneral ? 'General Audit' : review.company}
+                            {isGeneral ? 'Cek Umum' : review.company}
                           </span>
                         </CardDescription>
                       </div>
@@ -141,9 +141,9 @@ export default async function DashboardPage() {
                   </CardContent>
 
                   <CardFooter className="pt-4 border-t border-border/50 mt-auto">
-                    <Button variant={isGeneral ? 'default' : 'ghost'} className="w-full justify-between hover:bg-muted/50 text-foreground" asChild>
+                    <Button variant={isGeneral ? 'outline' : 'ghost'} className="w-full justify-between hover:bg-muted/50 text-foreground" asChild>
                       <Link href={`/dashboard/${review.id}`}>
-                        Lihat Rapor
+                        Lihat Hasil
                         <ChevronRightIcon className="w-4 h-4 opacity-70" />
                       </Link>
                     </Button>

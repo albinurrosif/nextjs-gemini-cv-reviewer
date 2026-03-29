@@ -66,7 +66,7 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!cvText.trim()) {
-      toast.error('Harap unggah PDF CV Anda, paste teks, atau gunakan CV profil!');
+      toast.error('Harap unggah PDF CV, paste teks, atau gunakan CV profil!');
       return;
     }
 
@@ -86,7 +86,7 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
       if (response.ok && result.success) {
         setAiResult(result.data);
       } else {
-        toast.error('Gagal menganalisis: ' + (result.error || 'Unknown error'));
+        toast.error('Gagal mengecek: ' + (result.error || 'Unknown error'));
       }
     } catch (error) {
       console.error('Fetch error:', error);
@@ -128,13 +128,13 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-10 p-4 md:py-12">
       <div className="text-center space-y-4">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Cek Skor ATS CV</h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Audit CV Anda berdasarkan standar ATS global. Temukan kelemahan format dan dapatkan versi penulisan ulang yang lebih profesional.</p>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Cek format CV-mu berdasarkan standar ATS global. Temukan kelemahan format dan dapatkan saran perbaikan penulisan yang lebih profesional.</p>
       </div>
 
       <Card className="shadow-lg border-muted">
         <CardHeader className="bg-muted/30 pb-6">
           <CardTitle className="text-xl">Dokumen CV</CardTitle>
-          <CardDescription>Masukkan CV yang ingin Anda periksa kesehatannya.</CardDescription>
+          <CardDescription>Masukkan CV yang ingin dicek kesehatannya.</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -174,7 +174,7 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
                     <span className="text-3xl">🔐</span>
                     <div>
                       <p className="font-semibold text-emerald-700 dark:text-emerald-400">CV Master Aktif</p>
-                      <p className="text-sm text-emerald-600/80 dark:text-emerald-500/80">Dokumen dari profil Anda akan diaudit.</p>
+                      <p className="text-sm text-emerald-600/80 dark:text-emerald-500/80">Teks CV utama dari profilmu akan dicek.</p>
                     </div>
                   </div>
                 </div>
@@ -196,7 +196,7 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
                   ) : (
                     <>
                       <div className="text-center">
-                        <p className="font-medium">Unggah file CV Anda</p>
+                        <p className="font-medium">Upload PDF CV-mu</p>
                         <p className="text-xs text-muted-foreground mt-1">Hanya format PDF (Maks. 5MB).</p>
                       </div>
                       <input type="file" accept="application/pdf" id="pdf-upload" className="hidden" onChange={handleFileUpload} disabled={isUploadingPdf} />
@@ -209,7 +209,7 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
                   )}
                 </div>
               ) : (
-                <Textarea value={cvText} onChange={(e) => setCvText(e.target.value)} placeholder="Paste teks CV Anda di sini..." className="min-h-[150px] animate-in fade-in" />
+                <Textarea value={cvText} onChange={(e) => setCvText(e.target.value)} placeholder="Paste teks CV-mu di sini..." className="min-h-[150px] animate-in fade-in" />
               )}
             </div>
 
@@ -218,7 +218,7 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
                 Reset
               </Button>
               <Button type="submit" disabled={isLoading || isUploadingPdf} className="w-2/3">
-                {isLoading ? 'Menganalisis...' : 'Audit CV Saya'}
+                {isLoading ? 'Mengecek...' : 'Mulai Cek ATS'}
               </Button>
             </div>
           </form>
@@ -231,8 +231,8 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
             <CardContent className="pt-6 pb-6 flex flex-col items-center text-center gap-4">
               <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               <div>
-                <p className="font-semibold text-lg">Menganalisis CV...</p>
-                <p className="text-sm text-muted-foreground mt-1">AI sedang mengecek standar ATS Anda.</p>
+                <p className="font-semibold text-lg">Mengecek CV...</p>
+                <p className="text-sm text-muted-foreground mt-1">AI sedang mengecek standar penulisan ATS.</p>
               </div>
             </CardContent>
           </Card>
@@ -254,7 +254,7 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
               <GeneralAnalysisResult data={aiResult} />
 
               <Card className="border-border bg-muted/20 mt-4 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-sm text-muted-foreground">Simpan hasil audit ini ke Dashboard Anda?</div>
+                <div className="text-sm text-muted-foreground">Simpan hasil cek ini ke riwayat agar bisa diakses kembali.</div>
                 <Button
                   onClick={async () => {
                     // TRIK DATABASE: suntikkan data dummy agar bisa masuk ke tabel Review yang sama!
@@ -268,7 +268,7 @@ export default function GeneralAnalyzerForm({ profileCvText = null, isLoggedIn =
 
                     if (!isLoggedIn) {
                       localStorage.setItem('pendingReview', JSON.stringify({ formData: dummyFormData, aiResult }));
-                      toast.info('Hasil akan disimpan', { description: 'Silakan login untuk menyimpannya.' });
+                      toast.info('Hasil akan disimpan', { description: 'Silakan masuk untuk menyimpannya secara permanen.' });
                       router.push('/login');
                       return;
                     }

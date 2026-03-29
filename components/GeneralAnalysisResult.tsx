@@ -49,33 +49,21 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
         </div>
         {/* Kontainer Tab */}
         <div className="flex overflow-x-auto w-full gap-2 border-b pb-3 snap-x snap-mandatory hide-scrollbar">
-          <Button 
-            variant={activeTab === 'rapor' ? 'default' : 'ghost'} 
-            onClick={() => setActiveTab('rapor')} 
-            className="rounded-full shrink-0 snap-start"
-          >
+          <Button variant={activeTab === 'rapor' ? 'default' : 'ghost'} onClick={() => setActiveTab('rapor')} className="rounded-full shrink-0 snap-start">
             📊 Rapor ATS
           </Button>
 
           {/* Sembunyikan tab CV jika AI gagal membuat rewrittenCv */}
           {data.rewrittenCv && (
-            <Button 
-              variant={activeTab === 'cv' ? 'default' : 'ghost'} 
-              onClick={() => setActiveTab('cv')} 
-              className="rounded-full shrink-0 snap-start"
-            >
-              ✨ CV Masterpiece
+            <Button variant={activeTab === 'cv' ? 'default' : 'ghost'} onClick={() => setActiveTab('cv')} className="rounded-full shrink-0 snap-start">
+              ✨ Draft CV Baru
             </Button>
           )}
 
           {/* Sembunyikan tab Interview jika datanya kosong */}
           {data.interviewQuestions && data.interviewQuestions.length > 0 && (
-            <Button 
-              variant={activeTab === 'interview' ? 'default' : 'ghost'} 
-              onClick={() => setActiveTab('interview')} 
-              className="rounded-full shrink-0 snap-start"
-            >
-              🎤 Interview Prep
+            <Button variant={activeTab === 'interview' ? 'default' : 'ghost'} onClick={() => setActiveTab('interview')} className="rounded-full shrink-0 snap-start">
+              🎤 Persiapan Interview
             </Button>
           )}
         </div>
@@ -89,10 +77,8 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
               <span className="text-9xl font-black">{data.matchScore}</span>
             </div>
             <CardHeader className="pb-2">
-              <CardTitle className="text-2xl">Skor Standar ATS Anda</CardTitle>
-              <CardDescription>
-                Audit kelayakan CV berdasarkan struktur, metrik, dan kata kerja aktif.
-              </CardDescription>
+              <CardTitle className="text-2xl">Skor Standar ATS</CardTitle>
+              <CardDescription>Cek kelayakan CV berdasarkan struktur, metrik, dan kata kerja aktif.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4">
@@ -154,9 +140,7 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
-                {data.strategicAdvice}
-              </p>
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">{data.strategicAdvice}</p>
             </CardContent>
           </Card>
         </div>
@@ -170,11 +154,9 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
             <CardHeader className="bg-primary/5 pb-4 border-b flex flex-row items-start justify-between">
               <div>
                 <CardTitle className="text-xl text-primary flex items-center gap-2">
-                  <span>✨</span> CV Masterpiece (Versi AI)
+                  <span>✨</span> Draft CV Baru (Versi AI)
                 </CardTitle>
-                <CardDescription className="mt-1">
-                  CV Anda telah ditulis ulang menggunakan standar ATS. Salin dan tempel ke Word/Docs.
-                </CardDescription>
+                <CardDescription className="mt-1">CV-mu telah ditulis ulang menggunakan standar ATS. Salin dan paste ke Word/Docs.</CardDescription>
               </div>
               <Button
                 variant="outline"
@@ -183,7 +165,7 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
                 onClick={() => {
                   navigator.clipboard.writeText(data.rewrittenCv || '');
                   toast.success('CV Berhasil Disalin!', {
-                    description: 'Silakan paste di Microsoft Word atau Google Docs.'
+                    description: 'Silakan paste di Microsoft Word atau Google Docs.',
                   });
                 }}
               >
@@ -193,9 +175,7 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
             <CardContent className="pt-6">
               <div className="bg-muted/30 p-6 rounded-md border text-sm text-foreground/90 max-h-[600px] overflow-y-auto">
                 {/* Memanggil Komponen Markdown yang sudah diperkuat */}
-                <ReactMarkdown components={markdownComponents}>
-                  {data.rewrittenCv}
-                </ReactMarkdown>
+                <ReactMarkdown components={markdownComponents}>{data.rewrittenCv}</ReactMarkdown>
               </div>
             </CardContent>
           </Card>
@@ -210,23 +190,27 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
               <CardTitle className="text-lg flex items-center gap-2">
                 <span>🎤</span> Prediksi Pertanyaan Interview
               </CardTitle>
-              <CardDescription>Berdasarkan pengalaman yang Anda tulis di CV.</CardDescription>
+              <CardDescription>Berdasarkan pengalaman yang tertulis di CV-mu.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 {data.interviewQuestions.map((q, i) => (
                   <div key={i} className="border-b last:border-0 pb-4 last:pb-0">
                     <p className="font-semibold text-sm mb-1">Q: {q.question}</p>
-                    <p className="text-xs text-muted-foreground mb-2">💡 <span className="italic">Kenapa HRD bertanya ini:</span> {q.reason}</p>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      💡 <span className="italic">Kenapa HRD bertanya ini:</span> {q.reason}
+                    </p>
                     <div className="bg-muted/50 p-3 rounded-md">
                       <p className="text-xs font-medium mb-1">Contoh Jawaban (Metode STAR):</p>
                       <div className="text-sm text-muted-foreground">
                         {/* Markdown untuk Contoh Jawaban */}
-                        <ReactMarkdown components={{
-                          strong: markdownComponents.strong,
-                          em: markdownComponents.em,
-                          p: ({ node, ...props }: any) => <span {...props} /> // Hindari jarak antar paragraf terlalu lebar di kotak ini
-                        }}>
+                        <ReactMarkdown
+                          components={{
+                            strong: markdownComponents.strong,
+                            em: markdownComponents.em,
+                            p: ({ node, ...props }: any) => <span {...props} />, // Hindari jarak antar paragraf terlalu lebar di kotak ini
+                          }}
+                        >
                           {q.sampleAnswer}
                         </ReactMarkdown>
                       </div>

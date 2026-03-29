@@ -5,11 +5,10 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import GeneralAnalysisResult from '@/components/GeneralAnalysisResult';
 
-
 // --- IMPORT KOMPONEN UI & IKON ---
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, BuildingIcon, BriefcaseIcon, CalendarIcon } from 'lucide-react';
-import AnalysisResult from '@/components/AnalysisResult';
+import AnalysisResult from '@/components/MatchAnalysisResult';
 
 export default async function ReviewDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // 1. Cek Auth
@@ -82,7 +81,7 @@ export default async function ReviewDetailPage({ params }: { params: Promise<{ i
           </div>
         </div>
 
-        {/* --- HASIL AI (PENGKONDISIAN PINTAR) --- */}
+        {/* --- HASIL AI --- */}
         <div className="pt-2">{review.jobType === 'General' ? <GeneralAnalysisResult data={aiData} /> : <AnalysisResult data={aiData} />}</div>
       </div>
     </main>

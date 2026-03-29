@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import AnalysisResult from './AnalysisResult';
+import AnalysisResult from './MatchAnalysisResult';
 import { EvaluationResult } from '@/lib/evaluation/scorer.service';
 import extractText from 'react-pdftotext';
 import { saveReviewAction } from '@/app/actions/review';
@@ -17,7 +17,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false }: { profileCvText?: string | null, isLoggedIn?: boolean }) {
+export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false }: { profileCvText?: string | null; isLoggedIn?: boolean }) {
   const router = useRouter();
   const defaultForm = {
     role: '',
@@ -82,19 +82,16 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.cvText.trim()) {
-      alert('Harap unggah PDF CV Anda, paste teks, atau gunakan CV profil!');
+      toast('Harap unggah PDF CV Anda, paste teks, atau gunakan CV profil!');
       return;
     }
-
-    console.log('=== TEKS CV YANG DIKIRIM KE SERVER ===');
-    console.log(formData.cvText);
 
     setIsLoading(true);
     setAiResult(null);
     setIsSaved(false);
 
     try {
-      const response = await fetch('/api/analyze', {
+      const response = await fetch('/api/analyze-match', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -104,11 +101,11 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
       if (response.ok && result.success) {
         setAiResult(result.data);
       } else {
-        alert('Gagal menganalisis: ' + (result.error || 'Unknown error'));
+        toast('Gagal menganalisis: ' + (result.error || 'Unknown error'));
       }
     } catch (error) {
       console.error('Fetch error:', error);
-      alert('Terjadi kesalahan saat menghubungi server.');
+      toast('Terjadi kesalahan saat menghubungi server.');
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +116,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
     if (!file) return;
 
     if (file.type !== 'application/pdf') {
-      alert('Tolong unggah file dengan format PDF.');
+      toast('Tolong unggah file dengan format PDF.');
       return;
     }
 
@@ -134,7 +131,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
       setUploadedFileInfo({ name: file.name, size: `${sizeInKB} KB` });
     } catch (error) {
       console.error('Gagal membaca PDF:', error);
-      alert('File PDF ini tidak bisa dibaca (mungkin diproteksi atau berupa gambar hasil scan).');
+      toast('File PDF ini tidak bisa dibaca (mungkin diproteksi atau berupa gambar hasil scan).');
     } finally {
       setIsUploadingPdf(false);
       e.target.value = '';
@@ -151,14 +148,14 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
       {/* --- HERO SECTION --- */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">AI CV Analyzer</h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Tingkatkan peluang lolos seleksi. Masukkan kualifikasi pekerjaan dan CV Anda, biarkan AI merombaknya menggunakan metode STAR.</p>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Cek kecocokan CV-mu dengan kriteria loker incaran. Temukan gap skill dan dapatkan saran perbaikan instan.</p>
       </div>
 
       {/* --- FORM CARD (SHADCN) --- */}
       <Card className="shadow-lg border-muted">
         <CardHeader className="bg-muted/30 pb-6">
           <CardTitle className="text-xl">Detail Lamaran</CardTitle>
-          <CardDescription>Masukkan informasi lowongan yang ingin Anda lamar.</CardDescription>
+          <CardDescription>Masukkan detail posisi dan perusahaan yang dituju.</CardDescription>
         </CardHeader>
 
         <CardContent className="pt-6">
@@ -206,7 +203,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
             {/* CV INPUT SECTION */}
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <Label>CV / Resume Anda</Label>
+                <Label>Pilih Sumber CV</Label>
                 <div className="flex bg-muted p-1 rounded-md overflow-x-auto">
                   {/* TAB 1: CV PROFIL (Hanya muncul jika punya profil) */}
                   {profileCvText && (
@@ -246,7 +243,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
                     <span className="text-3xl">🔐</span>
                     <div>
                       <p className="font-semibold text-emerald-700 dark:text-emerald-400">CV Master Aktif</p>
-                      <p className="text-sm text-emerald-600/80 dark:text-emerald-500/80">Dokumen dari profile Anda akan dianalisis.</p>
+                      <p className="text-sm text-emerald-600/80 dark:text-emerald-500/80">Teks CV utama dari profilmu akan digunakan untuk analisis ini.</p>
                     </div>
                   </div>
                   <Button type="button" variant="outline" size="sm" asChild className="shrink-0">
@@ -271,7 +268,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
                   ) : (
                     <>
                       <div className="text-center">
-                        <p className="font-medium">Unggah file CV Anda</p>
+                        <p className="font-medium">Upload PDF CV-mu</p>
                         <p className="text-xs text-muted-foreground mt-1">Hanya format PDF (Maks. 5MB).</p>
                       </div>
                       <input type="file" accept="application/pdf" id="pdf-upload" className="hidden" onChange={handleFileUpload} disabled={isUploadingPdf} />
@@ -284,7 +281,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
                   )}
                 </div>
               ) : (
-                <Textarea name="cvText" value={formData.cvText} onChange={handleChange} placeholder="Paste seluruh isi teks CV Anda di sini..." className="min-h-[150px] animate-in fade-in" />
+                <Textarea name="cvText" value={formData.cvText} onChange={handleChange} placeholder="Paste seluruh isi teks CV-mu di sini..." className="min-h-[150px] animate-in fade-in" />
               )}
             </div>
 
@@ -294,7 +291,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
                 Reset
               </Button>
               <Button type="submit" disabled={isLoading || isUploadingPdf} className="w-2/3">
-                {isLoading ? 'Menganalisis...' : 'Analyze Application'}
+                {isLoading ? 'Menganalisis...' : 'Cek Kecocokan CV'}
               </Button>
             </div>
           </form>
@@ -309,7 +306,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
               <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               <div>
                 <p className="font-semibold text-lg">Menganalisis CV...</p>
-                <p className="text-sm text-muted-foreground mt-1">AI sedang bekerja, mohon tunggu sebentar.</p>
+                <p className="text-sm text-muted-foreground mt-1">AI sedang membandingkan CV dengan kriteria loker.</p>
               </div>
             </CardContent>
           </Card>
@@ -334,14 +331,14 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
 
               {/* TOMBOL SIMPAN MANUAL */}
               <Card className="border-border bg-muted/20 mt-4 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-sm text-muted-foreground">Ingin menyimpan hasil review ini ke Dashboard Anda?</div>
+                <div className="text-sm text-muted-foreground">Simpan hasil review ini ke riwayat agar bisa diakses kembali.</div>
                 <Button
                   onClick={async () => {
                     // --- JIKA TAMU (GUEST) ---
                     if (!isLoggedIn) {
                       localStorage.setItem('pendingReview', JSON.stringify({ formData, aiResult }));
                       toast.info('Hasil akan disimpan', {
-                        description: 'Silakan login untuk menyimpannya ke Dashboard Anda.',
+                        description: 'Silakan masuk untuk menyimpannya secara permanen.',
                       });
                       router.push('/login');
                       return;
@@ -354,7 +351,7 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
                     if (res.success) {
                       setIsSaved(true);
                     } else {
-                      alert(res.error);
+                      toast.error(res.error);
                     }
                   }}
                   disabled={isSaving || isSaved}

@@ -54,3 +54,5 @@ export async function deleteCvFromProfile() {
     return { success: false, error: 'Gagal menghapus CV.' };
   }
 }
+
+
