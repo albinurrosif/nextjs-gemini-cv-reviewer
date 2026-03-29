@@ -25,18 +25,18 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
     return 'bg-destructive/10 border-destructive/20';
   };
 
-  // Kumpulan komponen Markdown yang diperluas agar lebih kebal
+  // mngunakan { node: _, ...props } di semuanya agar React Console tidak error
   const markdownComponents: Components = {
-    h1: (props) => <h1 className="text-2xl font-bold mt-4 mb-2 text-primary" {...props} />,
-    h2: (props) => <h2 className="text-xl font-bold mt-4 mb-2 text-primary/80" {...props} />,
-    h3: (props) => <h3 className="text-lg font-bold mt-3 mb-1" {...props} />,
-    p: (props) => <p className="mb-3 leading-relaxed" {...props} />,
-    ul: (props) => <ul className="list-disc pl-5 mb-3 space-y-1" {...props} />,
-    ol: (props) => <ol className="list-decimal pl-5 mb-3 space-y-1" {...props} />,
-    li: (props) => <li className="pl-1" {...props} />,
-    strong: (props) => <strong className="font-semibold text-foreground" {...props} />,
-    em: (props) => <em className="italic text-foreground/80" {...props} />,
-    a: (props) => <a className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />,
+    h1: ({ node: _, ...props }) => <h1 className="text-2xl font-bold mt-4 mb-2 text-primary" {...props} />,
+    h2: ({ node: _, ...props }) => <h2 className="text-xl font-bold mt-4 mb-2 text-primary/80" {...props} />,
+    h3: ({ node: _, ...props }) => <h3 className="text-lg font-bold mt-3 mb-1" {...props} />,
+    p: ({ node: _, ...props }) => <p className="mb-3 leading-relaxed" {...props} />,
+    ul: ({ node: _, ...props }) => <ul className="list-disc pl-5 mb-3 space-y-1" {...props} />,
+    ol: ({ node: _, ...props }) => <ol className="list-decimal pl-5 mb-3 space-y-1" {...props} />,
+    li: ({ node: _, ...props }) => <li className="pl-1" {...props} />,
+    strong: ({ node: _, ...props }) => <strong className="font-semibold text-foreground" {...props} />,
+    em: ({ node: _, ...props }) => <em className="italic text-foreground/80" {...props} />,
+    a: ({ node: _, ...props }) => <a className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />,
   };
 
   return (
@@ -162,11 +162,15 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
                 variant="outline"
                 size="sm"
                 className="shrink-0 flex items-center gap-2 mt-1"
-                onClick={() => {
-                  navigator.clipboard.writeText(data.rewrittenCv || '');
-                  toast.success('CV Berhasil Disalin!', {
-                    description: 'Silakan paste di Microsoft Word atau Google Docs.',
-                  });
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(data.rewrittenCv || '');
+                    toast.success('CV Berhasil Disalin!', {
+                      description: 'Silakan paste di Microsoft Word atau Google Docs.',
+                    });
+                  } catch {
+                    toast.error('Gagal menyalin teks CV.');
+                  }
                 }}
               >
                 <span>📋</span> Copy Teks
@@ -208,7 +212,7 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
                           components={{
                             strong: markdownComponents.strong,
                             em: markdownComponents.em,
-                            p: ({ node, ...props }: any) => <span {...props} />, // Hindari jarak antar paragraf terlalu lebar di kotak ini
+                            p: ({ node: _, ...props }) => <span {...props} />,
                           }}
                         >
                           {q.sampleAnswer}
