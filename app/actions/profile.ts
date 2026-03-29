@@ -51,6 +51,7 @@ export async function deleteCvFromProfile() {
     revalidatePath('/');
     return { success: true };
   } catch (error) {
+    console.error('Gagal menghapus CV:', error);
     return { success: false, error: 'Gagal menghapus CV.' };
   }
 }

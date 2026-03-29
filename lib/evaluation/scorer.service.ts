@@ -47,7 +47,7 @@ export function parseAndEvaluateAIOutput(rawOutput: string): EvaluationResult {
     // Jika AI lupa mengirim array, amankan dengan fallback [] (array kosong)
     const evaluation: EvaluationResult = {
       isValidInput: typeof parsedData.isValidInput === 'boolean' ? parsedData.isValidInput : true,
-      invalidReason: typeof parsedData.invalidReason === 'string' ? parsedData.invalidReason : '',
+      invalidReason: typeof parsedData.invalidReason === 'string' ? parsedData.invalidReason : undefined,
       matchScore: typeof parsedData.matchScore === 'number' ? parsedData.matchScore : 0,
       strengths: Array.isArray(parsedData.strengths) ? parsedData.strengths : [],
       missingSkills: Array.isArray(parsedData.missingSkills) ? parsedData.missingSkills : [],
