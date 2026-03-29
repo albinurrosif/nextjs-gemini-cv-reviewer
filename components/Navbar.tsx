@@ -23,11 +23,11 @@ export default function Navbar({ user }: { user: User | null }) {
             <Link href="/dashboard" className="hover:text-foreground transition-colors">
               Dashboard
             </Link>
-            <Link href="/" className="hover:text-foreground transition-colors">
-              CV vs JD (Spesifik)
+            <Link href="/match" className="hover:text-foreground transition-colors">
+              Cek Kecocokan CV
             </Link>
             <Link href="/general" className="hover:text-foreground transition-colors">
-              CV ATS (Umum)
+              Cek ATS Umum
             </Link>
           </nav>
         </div>
@@ -46,7 +46,7 @@ export default function Navbar({ user }: { user: User | null }) {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">Akun Saya</p>
+                    <p className="text-sm font-medium leading-none">Akun</p>
                     <p className="text-xs leading-none text-muted-foreground truncate">{user.email}</p>
                   </div>
                 </DropdownMenuLabel>
@@ -54,7 +54,7 @@ export default function Navbar({ user }: { user: User | null }) {
                 <DropdownMenuItem asChild className="cursor-pointer">
                   <Link href="/profile" className="flex items-center w-full">
                     <UserCircleIcon className="mr-2 h-4 w-4" />
-                    <span>Profil Saya</span>
+                    <span>Profil</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -69,7 +69,7 @@ export default function Navbar({ user }: { user: User | null }) {
                   <form action={logout} className="w-full">
                     <button type="submit" className="flex items-center w-full">
                       <LogOutIcon className="mr-2 h-4 w-4" />
-                      <span>Log out</span>
+                      <span>Keluar</span>
                     </button>
                   </form>
                 </DropdownMenuItem>
@@ -77,7 +77,7 @@ export default function Navbar({ user }: { user: User | null }) {
             </DropdownMenu>
           ) : (
             <Button size="sm" asChild>
-              <Link href="/login">Login</Link>
+              <Link href="/login">Masuk</Link>
             </Button>
           )}
         </div>

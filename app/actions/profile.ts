@@ -25,10 +25,10 @@ export async function saveCvToProfile(cvText: string) {
 
     // Refresh halaman agar status "Tersimpan" langsung muncul
     revalidatePath('/profile');
-    revalidatePath('/'); // Refresh halaman utama (form analyzer) juga
+    revalidatePath('/'); // Refresh halaman utama
     return { success: true };
   } catch (error) {
-    console.error('Gagal menyimpan CV:', error);
+    console.error('Error saving CV:', error);
     return { success: false, error: 'Gagal menyimpan CV ke database.' };
   }
 }
@@ -51,6 +51,7 @@ export async function deleteCvFromProfile() {
     revalidatePath('/');
     return { success: true };
   } catch (error) {
+    console.error('Gagal menghapus CV:', error);
     return { success: false, error: 'Gagal menghapus CV.' };
   }
 }

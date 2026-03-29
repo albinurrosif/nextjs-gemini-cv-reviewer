@@ -52,25 +52,24 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
   return (
     <div className="w-full flex flex-col gap-6 mt-12">
       {/* --- MENU TABS NAVIGASI --- */}
-      {/* Menggunakan overflow-x-auto agar bisa digeser ke samping di HP, dan shrink-0 pada tombol */}
       <div className="w-full mb-4">
-        {/* HINT GESER: Hanya muncul di layar Mobile (md:hidden) */}
+        {/* HINT GESER: Hanya muncul di layar Mobile */}
         <div className="flex items-center text-xs text-muted-foreground/60 mb-2 md:hidden animate-pulse">
           <span>👈 Geser menu untuk fitur lain 👉</span>
         </div>
         {/* Kontainer Tab */}
         <div className="flex overflow-x-auto w-full gap-2 border-b pb-3 snap-x snap-mandatory hide-scrollbar">
           <Button variant={activeTab === 'analysis' ? 'default' : 'ghost'} onClick={() => setActiveTab('analysis')} className="rounded-full shrink-0 snap-start">
-            📊 Analysis & Gaps
+            📊 Cek & Gap
           </Button>
           <Button variant={activeTab === 'improvements' ? 'default' : 'ghost'} onClick={() => setActiveTab('improvements')} className="rounded-full shrink-0 snap-start">
-            ✨ CV Improvements
+            ✨ Perbaikan CV
           </Button>
           <Button variant={activeTab === 'coverLetter' ? 'default' : 'ghost'} onClick={() => setActiveTab('coverLetter')} className="rounded-full shrink-0 snap-start">
             ✉️ Cover Letter
           </Button>
           <Button variant={activeTab === 'interview' ? 'default' : 'ghost'} onClick={() => setActiveTab('interview')} className="rounded-full shrink-0 snap-start">
-            ❓ Interview Prep
+            ❓ Persiapan Interview
           </Button>
         </div>
       </div>
@@ -123,9 +122,7 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-sm text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 p-4 rounded-lg border border-emerald-200 dark:border-emerald-900">
-                        Luar biasa! CV Anda mencakup semua kriteria krusial.
-                      </p>
+                      <p className="text-sm text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 p-4 rounded-lg border border-emerald-200 dark:border-emerald-900">Bagus! CV-mu sudah mencakup kriteria krusial.</p>
                     )}
                   </div>
                 </CardContent>
@@ -180,7 +177,7 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 p-4 rounded-md border border-emerald-200 dark:border-emerald-900">Kalimat di CV Anda sudah terstruktur sangat baik!</p>
+                  <p className="text-sm text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 p-4 rounded-md border border-emerald-200 dark:border-emerald-900">Struktur kalimat di CV-mu sudah sangat baik.</p>
                 )}
               </section>
 
@@ -189,7 +186,7 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
                   <div className="flex items-center justify-between">
                     <h3 className="font-bold text-lg text-foreground">Professional Summary</h3>
                     <Button variant="outline" size="sm" onClick={() => handleCopy(data.tailoredSummary, 'summary')}>
-                      {copiedText === 'summary' ? 'Copied!' : 'Copy'}
+                      {copiedText === 'summary' ? 'Tersalin!' : 'Copy'}
                     </Button>
                   </div>
                   <div className="bg-muted/50 p-5 rounded-lg border border-border text-sm italic leading-relaxed text-foreground/80">&quot;{data.tailoredSummary}&quot;</div>
@@ -229,7 +226,7 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
               <Card className="relative overflow-hidden border-border">
                 <div className="absolute top-4 right-4 z-10">
                   <Button variant="secondary" size="sm" onClick={() => handleCopy(data.coverLetter, 'coverLetter')}>
-                    {copiedText === 'coverLetter' ? '✅ Copied' : '📋 Copy Text'}
+                    {copiedText === 'coverLetter' ? '✅ Tersalin' : '📋 Copy Text'}
                   </Button>
                 </div>
                 <CardContent className="pt-16 bg-muted/20 font-serif text-sm leading-loose whitespace-pre-wrap text-foreground">{data.coverLetter}</CardContent>
@@ -242,8 +239,8 @@ export default function AnalysisResult({ data }: { data: EvaluationResult }) {
             <motion.div key="interview" {...tabAnimation}>
               <Card className="border-border">
                 <CardHeader>
-                  <CardTitle>Prediksi Pertanyaan Wawancara</CardTitle>
-                  <CardDescription>Berdasarkan gap antara CV Anda dan Job Description.</CardDescription>
+                  <CardTitle>Prediksi Pertanyaan Interview</CardTitle>
+                  <CardDescription>Berdasarkan gap antara CV-mu dan Job Description.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
