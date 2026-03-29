@@ -120,6 +120,12 @@ export default function AnalyzerForm({ profileCvText = null, isLoggedIn = false 
       return;
     }
 
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Ukuran file maksimal 5MB.');
+      e.target.value = '';
+      return;
+    }
+
     setIsUploadingPdf(true);
 
     try {

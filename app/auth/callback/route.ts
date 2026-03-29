@@ -8,7 +8,9 @@ export async function GET(request: Request) {
   const code = searchParams.get('code');
 
   // Jika ada parameter 'next', arahkan ke sana (default: /dashboard)
-  const next = searchParams.get('next') ?? '/dashboard';
+  const nextParam = searchParams.get('next');
+  // Validate next is a relative path to prevent open redirect
+  const next = nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : '/dashboard';
 
   if (code) {
     // Siapkan brankas cookies

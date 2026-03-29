@@ -9,9 +9,13 @@ export interface JobDataInput {
   jobDescription: string;
 }
 
-// Kita ambil API Key dari environment variable (.env)
+// ambil API Key dari environment variable (.env)
 const apiKey = process.env.GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(apiKey);
+
+// Set timeout global untuk semua request ke Gemini (45 detik)
+const abortController = new AbortController();
+const timeoutId = setTimeout(() => abortController.abort(), 45000);
 
 export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<EvaluationResult> {
   // =================================================================
@@ -162,7 +166,13 @@ export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<
   `;
 
   try {
-    const result = await model.generateContent(prompt);
+    // Kirim prompt ke Gemini API
+    const result = await model.generateContent(prompt, {
+      signal: abortController.signal,
+    });
+
+    // Jika sudah dapat respons, batalkan timeout untuk mencegah abort yang tidak perlu
+    clearTimeout(timeoutId);
 
     const rawText = result.response.text();
 
@@ -170,6 +180,11 @@ export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<
 
     return finalResult;
   } catch (error) {
+    // Tangani error timeout secara khusus
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('Gemini API Timeout: Request dibatalkan setelah 45 detik.');
+      throw new Error('Request Timeout: Server AI terlalu lambat merespons.');
+    }
     console.error('Gemini API Error:', error);
     throw new Error('Failed to generate AI response');
   }
@@ -225,11 +240,19 @@ export async function analyzeGeneralCV(cvText: string): Promise<EvaluationResult
   `;
 
   try {
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent(prompt, {
+      signal: abortController.signal,
+    });
+
+    clearTimeout(timeoutId);
     const rawText = result.response.text();
     return parseAndEvaluateAIOutput(rawText);
   } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('Gemini API Timeout: Request dibatalkan setelah 45 detik.');
+      throw new Error('Request Timeout: Server AI terlalu lambat merespons.');
+    }
     console.error('Gemini API Error (General):', error);
-    throw new Error('Failed to generate AI response for General Analysis');
+    throw new Error('Failed to generate AI response');
   }
 }

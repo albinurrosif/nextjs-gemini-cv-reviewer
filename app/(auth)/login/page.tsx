@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Toaster } from '@/components/ui/sonner';
+import { Toast } from 'radix-ui';
 import { toast } from 'sonner';
 
 const initialState: ActionState = { error: null };
@@ -97,14 +99,14 @@ export default function LoginPage() {
 
         <CardFooter className="flex justify-center border-t p-4 text-center">
           <p className="text-xs text-muted-foreground">
-            Dengan mendaftar, kamu menyetujui
+            Dengan mendaftar, kamu menyetujui +{' '}
             <Link href="/terms" className="underline hover:text-primary">
               Ketentuan Layanan
-            </Link>
-            dan
+            </Link>{' '}
+            dan{' '}
             <Link href="/privacy" className="underline hover:text-primary">
               Kebijakan Privasi
-            </Link>
+            </Link>{' '}
             kami.
           </p>
         </CardFooter>

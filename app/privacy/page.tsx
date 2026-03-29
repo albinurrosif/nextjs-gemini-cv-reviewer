@@ -15,7 +15,7 @@ export default function PrivacyPolicy() {
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight lg:text-4xl mb-2">Kebijakan Privasi (Privacy Policy)</h1>
-          <p className="text-muted-foreground">Terakhir diperbarui: {new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}</p>
+          <p className="text-muted-foreground">Terakhir diperbarui: Maret 2026</p>
         </div>
 
         <section className="space-y-4">

@@ -30,6 +30,12 @@ export default function ProfileManager({ hasSavedCv, email, fullName, avatarUrl 
       return;
     }
 
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Ukuran file maksimal 5MB.');
+      e.target.value = '';
+      return;
+    }
+
     setIsUploading(true);
     const toastId = toast.loading('Mengekstrak teks dari PDF...');
 
