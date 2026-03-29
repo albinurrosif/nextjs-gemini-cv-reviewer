@@ -8,8 +8,12 @@ import { Toaster } from '@/components/ui/sonner';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'PreApply AI',
-  description: 'Tingkatkan peluang lolos lamaran kerja dengan AI CV Analyzer',
+  title: 'PreApply | Cek Kecocokan CV & Standar ATS Berbasis AI',
+  description: 'Audit CV-mu menggunakan AI. Dapatkan skor ATS, temukan gap dengan lowongan kerja, dan buat draft CV yang lebih menjual dalam hitungan detik.',
+
+  verification: {
+    google: 'FMrUmPZzKPul48fYnMY8yGvJbZC5hJpp7v1vQ-mjfow',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
