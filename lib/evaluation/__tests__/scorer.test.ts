@@ -26,7 +26,7 @@ describe('Scorer Service - parseAndEvaluateAIOutput', () => {
 
     // 'harapkan' (expect) hasilnya sesuai!
     expect(result.isValidInput).toBe(true);
-    expect(result.invalidReason).toBe('');
+    expect(result.invalidReason).toBeUndefined();
     expect(result.matchScore).toBe(85);
     expect(result.strengths[0]).toBe('Bisa React');
     expect(result.rewrittenCv).toContain('CV Fulan');
