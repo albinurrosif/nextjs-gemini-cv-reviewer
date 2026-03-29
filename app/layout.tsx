@@ -5,6 +5,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from '@/components/ui/sonner';
 
+import { Analytics } from '@vercel/analytics/react';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -24,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <NextTopLoader color="var(--primary)" showSpinner={false} />
           {children}
           <Toaster richColors position="top-center" />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
