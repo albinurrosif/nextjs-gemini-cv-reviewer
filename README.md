@@ -1,75 +1,100 @@
-# 🎯 PreApply v2 — AI Job Analyzer (Next.js Edition)
+# PreApply v2 — AI-Powered CV & ATS Analyzer
 
-A modern, production-ready web application to analyze CVs against job descriptions using Google Gemini AI. 
+[![Next.js](https://img.shields.io/badge/Next.js-16.1-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Google Gemini](https://img.shields.io/badge/Gemini_2.5_Flash-blue?style=for-the-badge&logo=google)](https://deepmind.google/technologies/gemini/)
+[![Supabase](https://img.shields.io/badge/Supabase-Database_&_Auth-3ECF8E?style=for-the-badge&logo=supabase)](https://supabase.com/)
+[![Upstash Redis](https://img.shields.io/badge/Upstash-Rate_Limiter-FF2E54?style=for-the-badge&logo=redis)](https://upstash.com/)
 
-[**Try the Live App Here**](https://preapply.vercel.app)
+A modern, production-minded web application designed to help job seekers bypass the ATS (Applicant Tracking System) filter. It analyzes CVs, identifies skill gaps against specific job descriptions, and rewrites experiences using the STAR method—all powered by Google Gemini AI.
 
-This project is a massive upgrade from V1, transitioning from a Python script to a full-fledged SaaS architecture using Next.js 16. It focuses on using Large Language Models (LLM) with strict JSON output parsing to perform gap analysis, provide actionable insights, and generate tailored content using the STAR method.
+[**✨ Try the Live App Here**](https://preapply.vercel.app)
 
-### 🚀 Key Features
+_(Note: This is a major architectural upgrade from V1, transitioning from a simple Python script into a full-stack Next.js web application with a focus on System Design, CI/CD, and robust error handling)._
 
-* **📊 Smart Gap Analysis:** Instantly scores CV relevance based on ATS keywords and identifies missing skills.
-* **✨ CV Improvement (STAR Method):** Critiques weak experience bullets and rewrites them into impactful, data-driven achievements.
-* **✉️ Cover Letter Draft:** Generates a ready-to-send, highly tailored cover letter based on the specific job type (Full-time, Internship, etc.).
-* **🛡️ Enterprise-Grade Reliability:** Implements strict backend validation, type-safe API routing, and AI hallucination mitigation via robust JSON parsing.
+---
 
-### 🌟 Additional Feature (DevOps & Engineering)
+## 🚀 Key Features
 
-* **🤖 CI/CD & AI Code Review:** This repository is integrated with a professional Git Flow. It uses **GitHub Actions** for automated Unit Testing (Vitest) and Linting (ESLint 9) on every Pull Request. It is also guarded by **CodeRabbit AI** for automated code reviews and PR summarization.
+- **📊 Dual-Mode Analysis:** \* **General ATS Check:** Audits your CV format, highlights strengths, and rewrites the entire document into an ATS-friendly Markdown format.
+  - **Targeted Match Analyzer:** Compares your CV against a specific Job Description to find missing keywords and generate a tailored Cover Letter.
+- **🪄 Magic Bullets (STAR Method):** The AI scans for the weakest bullet points in your CV, roasts them (constructively!), and rewrites them using the data-driven STAR (Situation, Task, Action, Result) method.
+- **🎤 Smart Interview Prep:** Generates behavioral and "trap" interview questions based on the gaps found in your CV, complete with HR reasoning and sample answers.
+- **🔐 Profile Vault & Guest Mode:** Sign in via Google OAuth (Supabase) to save your master CV. Not logged in? The app uses smart LocalStorage to save your history and syncs it automatically once you sign in.
 
-### 🛠️ Tech Stack
+---
 
-* **Frontend & Backend:** Next.js 16 (App Router, API Routes)
-* **Language:** TypeScript
-* **Styling:** Tailwind CSS
-* **AI Engine:** Google Gemini 2.5 Flash (`@google/generative-ai`)
-* **Testing & Quality:** Vitest, ESLint (Flat Config)
-* **Deployment:** Vercel
+## 🧠 System Design & Engineering Highlights
 
-### 📦 How to Run Locally
+As a side project built with scalability in mind, PreApply V2 implements several industry-standard architectural patterns:
+
+- **🛡️ Fail-Open Rate Limiting:** Protected AI endpoints using Upstash Redis (Max 3 req/min). Implemented a fail-open strategy so the app remains functional even if the Redis server goes down, preventing a Single Point of Failure (SPOF).
+- **🛑 Graceful AI Fallbacks:** LLMs can hallucinate. The Scorer Service uses strict Type-Safe parsing to catch malformed JSONs or plain text responses from Gemini, falling back to safe default values without crashing the UI.
+- **⏱️ Request Timeouts:** Implemented AbortController on Gemini API calls to sever connections exceeding 45 seconds, preventing infinite loading and Vercel serverless function timeouts.
+- **🤖 Automated QA & AI Code Review:** Enforced Git Flow with GitHub Actions. Every PR is checked by Vitest (Unit Tests), ESLint (Flat Config), and reviewed by CodeRabbit AI before merging.
+- **📈 SEO & Analytics:** Fully optimized with dynamic sitemap.ts, robots.ts, and privacy-first tracking via Vercel Web Analytics.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Next.js 16 (App Router), Tailwind CSS, Shadcn UI, Framer Motion
+- **Backend:** Next.js API Routes, Prisma ORM
+- **Database & Auth:** Supabase (PostgreSQL, Google OAuth)
+- **AI Engine:** Google Gemini 2.5 Flash (@google/generative-ai)
+- **Utilities:** react-pdftotext (Client-side PDF parsing to reduce server load)
+
+---
+
+## 📦 How to Run Locally
+
+Want to test it out on your machine? Follow these steps:
 
 **1. Clone the repository**
+
 ```bash
 git clone https://github.com/albinurrosif/nextjs-gemini-cv-reviewer.git
 cd nextjs-gemini-cv-reviewer
 ```
 
 **2. Install dependencies**
+
 ```bash
 npm install
 ```
 
-**3. Setup Secrets** Create a `.env.local` file in the root directory:
-```bash
-# Required for the main feature (Analysis)
-GEMINI_API_KEY="YOUR_GOOGLE_API_KEY"
+**3. Setup Environment Variables (Create a .env.local file in the root directory)**
+
+```env
+# [REQUIRED] AI Engine
+GEMINI_API_KEY="your_google_gemini_api_key"
+
+# [REQUIRED] Database & Auth
+NEXT_PUBLIC_SUPABASE_URL="your_supabase_url"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your_supabase_anon_key"
+DATABASE_URL="your_prisma_postgres_url"
+DIRECT_URL="your_prisma_direct_url"
+
+# [OPTIONAL] Rate Limiter (The app will bypass this if left empty)
+UPSTASH_REDIS_REST_URL="your_upstash_url"
+UPSTASH_REDIS_REST_TOKEN="your_upstash_token"
 ```
 
-**4. Run the App**
+**4. Run Prisma Generate & Start the App**
+
 ```bash
-npm run dev
-```
-Open `http://localhost:3000` in your browser.
-
-### ⚙️ Engineering Setup (CI/CD & Testing)
-
-To utilize the automated testing and linting locally before pushing to GitHub:
-
-**1. Run Linter:**
-Checks for code quality and formatting issues.
-```bash
-npm run lint
+   npx prisma generate
+   npm run dev
 ```
 
-**2. Run Unit Tests:**
-Ensures the business logic and AI output parsers are working correctly.
-```bash
-npm run test
-```
+Open http://localhost:3000 in your browser.
 
-### 👨‍💻 Author
+---
+
+## 👨‍💻 Author
 
 **Albi Nur Rosif**
-[Portfolio](albinur.vercel.app) | [GitHub](https://github.com/albinurrosif) | [LinkedIn](https://www.linkedin.com/in/albi-nur/)
+[Portfolio](https://albinur.vercel.app) | [GitHub](https://github.com/albinurrosif) | [LinkedIn](https://www.linkedin.com/in/albi-nur/)
 
-© 2026 PreApply.
+_Built with excessive amounts of coffee. © 2026 PreApply._
+
+---
