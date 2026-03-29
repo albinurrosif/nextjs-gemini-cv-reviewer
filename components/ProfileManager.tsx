@@ -4,6 +4,7 @@ import { useState } from 'react';
 import extractText from 'react-pdftotext';
 import { saveCvToProfile, deleteCvFromProfile } from '@/app/actions/profile';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 // Shadcn UI & Icons
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -69,7 +70,7 @@ export default function ProfileManager({ hasSavedCv, email, fullName, avatarUrl 
       {/* --- KARTU INFO USER --- */}
       <Card className="border-border shadow-sm">
         <CardContent className="flex items-center gap-6 p-6">
-          {avatarUrl ? <img src={avatarUrl} alt="Avatar" className="w-16 h-16 rounded-full border-2 border-primary/20 shadow-sm" /> : <UserCircleIcon className="w-16 h-16 text-muted-foreground opacity-50" />}
+          {avatarUrl ? <Image src={avatarUrl} alt="Avatar" width={64} height={64} className="rounded-full border-2 border-primary/20 shadow-sm" /> : <UserCircleIcon className="w-16 h-16 text-muted-foreground opacity-50" />}
           <div>
             <h2 className="text-xl font-bold">{fullName}</h2>
             <p className="text-muted-foreground">{email}</p>

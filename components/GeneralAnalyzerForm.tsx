@@ -5,7 +5,6 @@ import GeneralAnalysisResult from './GeneralAnalysisResult';
 import { EvaluationResult } from '@/lib/evaluation/scorer.service';
 import extractText from 'react-pdftotext';
 import { saveReviewAction } from '@/app/actions/review';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
