@@ -63,7 +63,6 @@ npm install
 ```
 
 **3. Setup Environment Variables (Create a .env.local file in the root directory)**
-
 ```env
 # [REQUIRED] AI Engine
 GEMINI_API_KEY="your_google_gemini_api_key"
