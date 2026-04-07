@@ -89,7 +89,7 @@ export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<
   });
 
   const prompt = `
-    Role: Anda adalah Senior Executive Recruiter dan Professional CV Writer kelas dunia.
+    Role: Anda adalah Tech Recruiter dan ATS Specialist yang empatik dan realistis. Sesuaikan standar penilaian, kritik, dan gaya bahasa Anda dengan level pengalaman yang tertera di CV kandidat (mulai dari Fresh Graduate hingga Senior).
     Target Role: ${jobData.role} at ${jobData.company} (${jobData.jobType}).
 
     JOB DESCRIPTION:
@@ -157,11 +157,11 @@ export async function analyzeCV(jobData: JobDataInput, cvText: string): Promise<
       "coverLetter": "<string: Surat lamaran lengkap. JANGAN gunakan markdown headers. Gunakan \\n untuk baris baru. Nada antusias dan Human Touch.>",
       "interviewQuestions": [
         {
-          "question": "<string: WAJIB berikan total 4 pertanyaan (2 wajar + 2 JEBAKAN) berdasarkan CV>",
-          "reason": "<string: Jelaskan apa jebakannya atau mengapa HRD menanyakan ini>",
-          "sampleAnswer": "<string: Contoh jawaban gaya bercerita (Storytelling) menggunakan pengalaman NYATA di CV>"
+          "question": "<string: Berikan 4 pertanyaan interview yang PALING MUNGKIN DITANYAKAN HRD/User berdasarkan kecocokan CV ini dengan lowongan. Sesuaikan tingkat kesulitannya dengan level pengalaman kandidat (fresher vs senior)>",
+          "reason": "<string: Jelaskan secara singkat mengapa pewawancara menanyakan hal ini>",
+          "sampleAnswer": "<string: Contoh cara menjawab yang baik dan natural (gunakan pengalaman nyata yang ada di CV)>"
         }
-      ]
+      ],
     }
   `;
 
@@ -199,7 +199,7 @@ export async function analyzeGeneralCV(cvText: string): Promise<EvaluationResult
   });
 
   const prompt = `
-    Role: Anda adalah Senior Executive Recruiter dan Professional CV Writer kelas dunia.
+    Role: Anda adalah Tech Recruiter dan ATS Specialist yang empatik dan realistis. Sesuaikan standar penilaian, kritik, dan gaya bahasa Anda dengan level pengalaman yang tertera di CV kandidat (mulai dari Fresh Graduate hingga Senior).
     Tugas: Lakukan audit ATS secara UMUM pada CV berikut dan tulis ulang seluruh isinya menjadi lebih menjual.
 
     CANDIDATE CV:
@@ -222,7 +222,7 @@ export async function analyzeGeneralCV(cvText: string): Promise<EvaluationResult
       "strengths": ["<string: 3-4 Kekuatan dari CV asli>"],
       "missingSkills": ["<string: 3-4 Kelemahan format atau isi CV (Kritik tajam tapi membangun)>"],
       "strategicAdvice": "<string: 2 paragraf saran untuk merombak CV asli>",
-      "atsKeywords": [], 
+      "atsKeywords": [],
       "magicBullets": [],
       "tailoredSummary": "",
       "tailoredExperiences": [],
@@ -230,9 +230,9 @@ export async function analyzeGeneralCV(cvText: string): Promise<EvaluationResult
       "coverLetter": "",
       "interviewQuestions": [
         {
-          "question": "<string: 3 pertanyaan interview Behavioral berdasarkan pengalaman di CV>",
-          "reason": "<string: Alasan HRD menanyakan ini>",
-          "sampleAnswer": "<string: Contoh jawaban metode STAR>"
+          "question": "<string: Berikan 3 pertanyaan interview fundamental/dasar yang hampir pasti ditanyakan HRD saat melihat CV ini. Fokus pada validasi skill atau pengalaman yang tertulis>",
+          "reason": "<string: Apa yang sebenarnya ingin dicari tahu oleh HRD dari pertanyaan ini?>",
+          "sampleAnswer": "<string: Contoh formula jawaban yang terstruktur dan meyakinkan>"
         }
       ],
       "rewrittenCv": "<string: TULIS ULANG SELURUH CV ASLI KE DALAM TEKS MARKDOWN YANG RAPI DAN RAMAH ATS. Gunakan Action Verbs. Ubah poin pengalaman menjadi format STAR. (INGAT ATURAN BAHASA NO.2)>"

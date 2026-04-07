@@ -5,6 +5,7 @@ import { EvaluationResult } from '@/lib/evaluation/scorer.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { toast } from 'sonner';
 import ReactMarkdown, { type Components } from 'react-markdown';
 
@@ -197,31 +198,42 @@ export default function GeneralAnalysisResult({ data }: { data: EvaluationResult
               <CardDescription>Berdasarkan pengalaman yang tertulis di CV-mu.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
+              <Accordion type="single" collapsible className="w-full">
                 {data.interviewQuestions.map((q, i) => (
-                  <div key={i} className="border-b last:border-0 pb-4 last:pb-0">
-                    <p className="font-semibold text-sm mb-1">Q: {q.question}</p>
-                    <p className="text-xs text-muted-foreground mb-2">
-                      💡 <span className="italic">Kenapa HRD bertanya ini:</span> {q.reason}
-                    </p>
-                    <div className="bg-muted/50 p-3 rounded-md">
-                      <p className="text-xs font-medium mb-1">Contoh Jawaban (Metode STAR):</p>
-                      <div className="text-sm text-muted-foreground">
-                        {/* Markdown untuk Contoh Jawaban */}
-                        <ReactMarkdown
-                          components={{
-                            strong: markdownComponents.strong,
-                            em: markdownComponents.em,
-                            p: ({ node: _, ...props }) => <span {...props} />,
-                          }}
-                        >
-                          {q.sampleAnswer}
-                        </ReactMarkdown>
+                  <AccordionItem value={`item-${i}`} key={i} className="border-border">
+                    <AccordionTrigger className="text-left font-semibold hover:text-primary transition-colors">
+                      <span className="flex gap-3">
+                        <span className="text-muted-foreground font-normal">Q{i + 1}.</span>
+                        {q.question}
+                      </span>
+                    </AccordionTrigger>
+
+                    <AccordionContent className="space-y-4 pt-2 pb-4">
+                      {/* Alasan */}
+                      <div className="bg-accent/50 border-l-4 border-primary p-3 text-sm text-foreground">
+                        <strong>💡 Kenapa ditanyakan:</strong> {q.reason}
                       </div>
-                    </div>
-                  </div>
+
+                      {/* Jawaban */}
+                      <div className="bg-muted/30 p-4 rounded-md border border-border text-sm">
+                        <strong className="text-emerald-600 dark:text-emerald-500 block mb-2">Contoh Jawaban (Metode STAR):</strong>
+
+                        <div className="whitespace-pre-wrap text-muted-foreground leading-relaxed">
+                          <ReactMarkdown
+                            components={{
+                              strong: markdownComponents.strong,
+                              em: markdownComponents.em,
+                              p: ({ node: _, ...props }) => <span {...props} />,
+                            }}
+                          >
+                            {q.sampleAnswer}
+                          </ReactMarkdown>
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 ))}
-              </div>
+              </Accordion>
             </CardContent>
           </Card>
         </div>
